@@ -49,8 +49,30 @@ const genData = async () => {
       sessionStart = new Date();
       console.log('🆕 New session started');
     } else {
-      const increase = Math.floor(rand(1, 4));
-      newLevel = prev.waterLevel + increase;
+      // Calculate intelligent increment based on flow rate
+      // Flow rate is in L/min, assume bottle is ~2 liters
+      // So if flow rate = 0.5 L/min, it fills 25% per minute
+      // For 30-second intervals: (flowRate / 2) * 0.5 * 100 = % increment
+      const flowRate = prev.flowRate || 0.5;
+      const humidity = prev.humidity || 60;
+      
+      // Base increment from flow rate (30 sec update interval)
+      let increment = (flowRate / 2) * 0.5 * 100;
+      
+      // Adjust based on humidity (better conditions = better production)
+      if (humidity > 70) {
+        increment *= 1.15;
+      } else if (humidity < 50) {
+        increment *= 0.75;
+      }
+      
+      // Add small random variation (±10%)
+      increment = increment * (0.9 + Math.random() * 0.2);
+      
+      // Clamp between 0.4% and 2.5% per update
+      increment = Math.max(0.4, Math.min(2.5, increment));
+      
+      newLevel = prev.waterLevel + increment;
       
       if (newLevel >= 100) {
         newLevel = 100;

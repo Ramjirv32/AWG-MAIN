@@ -1,5 +1,6 @@
 const express = require('express');
 const { getLatest, getReadings, fillTime, getHistory, getAlerts, markAlertsRead, drinkWater } = require('../controller/sensorController');
+const { aiChat, getAIContext } = require('../controller/aiController');
 const router = express.Router();
 
 router.get('/latest', getLatest);
@@ -9,5 +10,9 @@ router.get('/history', getHistory);
 router.get('/alerts', getAlerts);
 router.put('/alerts/read', markAlertsRead);
 router.post('/drink', drinkWater);
+
+// AI routes
+router.post('/ai/chat', aiChat);
+router.get('/ai/context', getAIContext);
 
 module.exports = router;
