@@ -1,0 +1,57 @@
+### Test AWG API
+
+### Get Latest Sensor Data (now includes alerts)
+GET http://localhost:5000/api/sensor/latest
+
+### Get Readings (last 10)
+GET http://localhost:5000/api/sensor/readings?limit=10
+
+### Predict Fill Time
+GET http://localhost:5000/api/sensor/predict/fillTime
+
+### Get Fill History
+GET http://localhost:5000/api/sensor/history
+
+### Get All Alerts
+GET http://localhost:5000/api/sensor/alerts
+
+### Mark Alerts as Read
+PUT http://localhost:5000/api/sensor/alerts/read
+
+### Register User
+POST http://localhost:5000/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@test.com",
+  "password": "test123",
+  "deviceId": "SIM-AWG-01"
+}
+
+### Login
+POST http://localhost:5000/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@test.com",
+  "password": "test123"
+}
+
+### Chat with AI
+POST http://localhost:5000/api/chat
+Content-Type: application/json
+
+{
+  "msg": "How much water is in the bottle?"
+}
+
+### Submit Support Ticket
+POST http://localhost:5000/api/support
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@test.com",
+  "message": "Need help with my device"
+}
