@@ -108,6 +108,31 @@ User question: ${msg}`;
   }
 };
 
+const logConversation = async (req, res) => {
+  try {
+    const { userMsg, aiReply, context, deviceId } = req.body;
+
+    if (!userMsg || !aiReply) {
+      return res.status(400).json({ msg: 'userMsg and aiReply are required' });
+    }
+
+    const entry = new Chat({
+      userId: req.user?.id,
+      deviceId: deviceId || 'SIM-AWG-01',
+      userMsg,
+      aiReply,
+      context
+    });
+
+    await entry.save();
+
+    res.json({ status: 'saved' });
+  } catch (err) {
+    console.error('Chat log error:', err);
+    res.status(500).json({ msg: 'Failed to store chat conversation' });
+  }
+};
+
 const getChatHistory = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 20;
@@ -118,4 +143,4 @@ const getChatHistory = async (req, res) => {
   }
 };
 
-module.exports = { chat, getChatHistory };
+module.exports = { chat, getChatHistory, logConversation };
