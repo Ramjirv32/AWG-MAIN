@@ -10,12 +10,9 @@ connectDB();
 
 app.use(cors({
   origin: [
-    'https://7294-2401-4900-6335-89d0-c85d-978-822f-d901.ngrok-free.app',
-    'https://8af5-2401-4900-6335-89d0-c85d-978-822f-d901.ngrok-free.app',
     'http://localhost:3001',
     'http://localhost:3000',
-    'https://3247-2401-4900-6335-89d0-c85d-978-822f-d901.ngrok-free.app',
-    'https://e0aa-2401-4900-6335-89d0-c85d-978-822f-d901.ngrok-free.app'
+    'https://awg-main-gwv3.vercel.app',
   ],
   credentials: true
 }));
