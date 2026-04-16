@@ -471,13 +471,6 @@ Response rules:
                     <div className="text-xs text-gray-600 mt-1">Estimate when water will be ready</div>
                   </button>
                   <button
-                    onClick={() => { setInput("Is the water safe to drink?"); }}
-                    className="p-3 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors text-left"
-                  >
-                    <div className="text-sm font-medium text-gray-900">✨ Water Quality Check</div>
-                    <div className="text-xs text-gray-600 mt-1">Check TDS levels and safety</div>
-                  </button>
-                  <button
                     onClick={() => { setInput("Give me recommendations"); }}
                     className="p-3 bg-gray-50 border border-gray-200 rounded-xl hover:bg-gray-100 transition-colors text-left"
                   >

@@ -9,6 +9,8 @@
     "typescript": "^5"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1026.0",
+    "@aws-sdk/lib-dynamodb": "^3.1026.0",
     "axios": "^1.13.2",
     "bcryptjs": "^3.0.3",
     "body-parser": "^2.2.0",

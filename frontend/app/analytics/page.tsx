@@ -12,25 +12,35 @@ export default function Analytics() {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sensor/readings?limit=30`);
         const data = await res.json();
         console.log('Fetched readings:', data.length);
-        setReadings(data);
+        
+        // Map AWS fields to expected format
+        const mappedData = data.map((item: any) => ({
+          ...item,
+          waterLevel: item.water_level || item.waterLevel || 0,
+          humidity: item.humidity || 0,
+          temp: item.temperature || item.temp || 0,
+          battery: item.battery || 80,
+          flowRate: item.flow_rate || item.flowRate || 0.5,
+          timestamp: item.timestamp || new Date()
+        }));
+        
+        setReadings(mappedData);
 
-        if (data.length > 0) {
-          const avgFlow = data.reduce((s: number, r: any) => s + r.flowRate, 0) / data.length;
-          const avgHum = data.reduce((s: number, r: any) => s + r.humidity, 0) / data.length;
-          const avgTDS = data.reduce((s: number, r: any) => s + r.tds, 0) / data.length;
-          const minBattery = Math.min(...data.map((r: any) => r.battery));
+        if (mappedData.length > 0) {
+          const avgFlow = mappedData.reduce((s: number, r: any) => s + (r.flowRate || 0), 0) / mappedData.length;
+          const avgHum = mappedData.reduce((s: number, r: any) => s + (r.humidity || 0), 0) / mappedData.length;
+          const minBattery = Math.min(...mappedData.map((r: any) => r.battery || 100));
           
-          const humTrend = data[0].humidity - data[Math.min(9, data.length - 1)].humidity;
-          const waterGrowth = data[0].waterLevel - data[Math.min(9, data.length - 1)].waterLevel;
+          const humTrend = (mappedData[0]?.humidity || 0) - (mappedData[Math.min(9, mappedData.length - 1)]?.humidity || 0);
+          const waterGrowth = (mappedData[0]?.waterLevel || 0) - (mappedData[Math.min(9, mappedData.length - 1)]?.waterLevel || 0);
 
           setStats({
             avgFlow: avgFlow.toFixed(2),
             avgHum: Math.floor(avgHum),
-            avgTDS: Math.floor(avgTDS),
             minBattery,
             humTrend,
             waterGrowth,
-            totalReadings: data.length
+            totalReadings: mappedData.length
           });
         }
       } catch (err) {
@@ -83,18 +93,6 @@ export default function Analytics() {
                 </p>
               </div>
 
-              <div className="bg-white p-6 rounded-xl shadow-lg border-2 border-gray-100 hover:border-green-300 transition-all">
-                <p className="text-gray-600 text-sm mb-2 font-semibold uppercase tracking-wide">Water Quality</p>
-                <p className="text-4xl font-extrabold text-green-600">{Math.round(stats.avgTDS)}</p>
-                <p className="text-sm text-gray-500 mt-1">ppm TDS</p>
-                <p className="text-xs font-bold mt-2">
-                  {stats.avgTDS > 100 ? (
-                    <span className="text-red-600 bg-red-50 px-2 py-1 rounded">⚠ Poor Quality</span>
-                  ) : (
-                    <span className="text-green-600 bg-green-50 px-2 py-1 rounded">✓ Excellent</span>
-                  )}
-                </p>
-              </div>
 
               <div className="bg-white p-6 rounded-xl shadow-lg border-2 border-gray-100 hover:border-orange-300 transition-all">
                 <p className="text-gray-600 text-sm mb-2 font-semibold uppercase tracking-wide">Battery Status</p>
@@ -141,10 +139,9 @@ export default function Analytics() {
                 </div>
 
                 {chartData.map((reading, idx) => {
-                  const waterHeight = Math.max(3, (reading.waterLevel / 100) * 100);
-                  const humidityHeight = Math.max(3, (reading.humidity / 100) * 100);
-                  const flowHeight = Math.max(3, (reading.flowRate / 1) * 100);
-                  const tdsHeight = Math.max(3, (reading.tds / 200) * 100);
+                  const waterHeight = Math.max(3, ((reading.waterLevel || 0) / 100) * 100);
+                  const humidityHeight = Math.max(3, ((reading.humidity || 0) / 100) * 100);
+                  const flowHeight = Math.max(3, ((reading.flowRate || 0) / 1) * 100);
 
                   return (
                     <div key={idx} className="flex-1 flex gap-1 items-end h-full group max-w-[120px]">
@@ -155,7 +152,7 @@ export default function Analytics() {
                           style={{ height: `${waterHeight}%`, minHeight: '12px' }}
                         >
                           <div className="opacity-0 group-hover:opacity-100 absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg font-bold whitespace-nowrap z-10 shadow-xl">
-                            💧 {reading.waterLevel.toFixed(1)}%
+                            💧 {(reading.waterLevel || 0).toFixed(1)}%
                           </div>
                         </div>
                       </div>
@@ -179,26 +176,11 @@ export default function Analytics() {
                           style={{ height: `${flowHeight}%`, minHeight: '12px' }}
                         >
                           <div className="opacity-0 group-hover:opacity-100 absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg font-bold whitespace-nowrap z-10 shadow-xl">
-                            ⚡ {reading.flowRate.toFixed(2)}L
+                            ⚡ {(reading.flowRate || 0).toFixed(2)}L
                           </div>
                         </div>
                       </div>
 
-                      {/* TDS Bar */}
-                      <div className="flex-1 relative">
-                        <div 
-                          className={`w-full rounded-t-lg transition-all duration-500 cursor-pointer shadow-lg ${
-                            reading.tds > 100 
-                              ? 'bg-gradient-to-t from-red-600 to-red-400 hover:from-red-700 hover:to-red-500' 
-                              : 'bg-gradient-to-t from-cyan-600 to-cyan-400 hover:from-cyan-700 hover:to-cyan-500'
-                          }`}
-                          style={{ height: `${tdsHeight}%`, minHeight: '12px' }}
-                        >
-                          <div className="opacity-0 group-hover:opacity-100 absolute -top-12 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-xs px-3 py-1.5 rounded-lg font-bold whitespace-nowrap z-10 shadow-xl">
-                            {reading.tds > 100 ? '⚠' : '✓'} {reading.tds}ppm
-                          </div>
-                        </div>
-                      </div>
 
                       {/* Reading Label */}
                       <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-xs font-bold text-gray-600 whitespace-nowrap">
@@ -222,14 +204,6 @@ export default function Analytics() {
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 bg-gradient-to-t from-green-600 to-green-400 rounded shadow"></div>
                   <span className="font-bold text-gray-700">Flow Rate</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-t from-cyan-600 to-cyan-400 rounded shadow"></div>
-                  <span className="font-bold text-gray-700">TDS (Safe)</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-t from-red-600 to-red-400 rounded shadow"></div>
-                  <span className="font-bold text-gray-700">TDS (Unsafe)</span>
                 </div>
               </div>
             </div>
@@ -272,11 +246,6 @@ export default function Analytics() {
                     🔋 Battery dropped to {stats.minBattery}% - Charge soon!
                   </p>
                 )}
-                {stats.avgTDS < 50 && (
-                  <p className="text-gray-900 font-medium bg-green-50 border-l-4 border-green-500 p-4 rounded">
-                    ✅ Excellent water purity maintained ({stats.avgTDS} ppm)
-                  </p>
-                )}
                 {stats.waterGrowth > 15 && (
                   <p className="text-gray-900 font-medium bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
                     📈 Strong water production - {Math.round(stats.waterGrowth)}% growth recently
@@ -299,7 +268,6 @@ export default function Analytics() {
                     <th className="text-right py-4 px-4 text-gray-900 font-bold">Water</th>
                     <th className="text-right py-4 px-4 text-gray-900 font-bold">Humidity</th>
                     <th className="text-right py-4 px-4 text-gray-900 font-bold">Flow</th>
-                    <th className="text-right py-4 px-4 text-gray-900 font-bold">TDS</th>
                     <th className="text-right py-4 px-4 text-gray-900 font-bold">Battery</th>
                   </tr>
                 </thead>
@@ -307,11 +275,10 @@ export default function Analytics() {
                   {readings.map((r: any, i: number) => (
                     <tr key={i} className="border-b hover:bg-gray-50 transition-colors">
                       <td className="py-4 px-4 text-gray-900 font-mono">{new Date(r.timestamp).toLocaleTimeString()}</td>
-                      <td className="text-right px-4 text-gray-900 font-bold">{Math.round(r.waterLevel)}%</td>
-                      <td className="text-right px-4 text-gray-900 font-bold">{Math.round(r.humidity)}%</td>
-                      <td className="text-right px-4 text-gray-900 font-bold">{Number(r.flowRate).toFixed(2)} L/min</td>
-                      <td className="text-right px-4 text-gray-900 font-bold">{Math.round(r.tds)} ppm</td>
-                      <td className="text-right px-4 text-gray-900 font-bold">{Math.round(r.battery)}%</td>
+                      <td className="text-right px-4 text-gray-900 font-bold">{Math.round(r.waterLevel || 0)}%</td>
+                      <td className="text-right px-4 text-gray-900 font-bold">{Math.round(r.humidity || 0)}%</td>
+                      <td className="text-right px-4 text-gray-900 font-bold">{(r.flowRate || 0).toFixed(2)} L/min</td>
+                      <td className="text-right px-4 text-gray-900 font-bold">{Math.round(r.battery || 0)}%</td>
                     </tr>
                   ))}
                 </tbody>

@@ -9,7 +9,6 @@ const historySchema = new mongoose.Schema({
   avgFlowRate: { type: Number, required: true },
   avgHumidity: { type: Number, required: true },
   avgTemp: { type: Number, required: true },
-  avgTDS: { type: Number, required: true },
   fillDuration: { type: Number, required: true },
   totalReadings: { type: Number, required: true }
 });

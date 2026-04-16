@@ -48,10 +48,6 @@ export default function Support() {
       a: "Fill time varies based on humidity and flow rate. Typically 2-4 hours in good conditions (60-80% humidity). Check the dashboard for real-time estimates."
     },
     {
-      q: "Is the water safe to drink?",
-      a: "Yes! The system monitors TDS (Total Dissolved Solids). Water is safe when TDS is below 100 ppm. Check water quality in the dashboard before drinking."
-    },
-    {
       q: "What do the alerts mean?",
       a: "Alerts notify you of important status changes. Critical alerts (red) need immediate attention. Low water alerts are normal during filling. Check the AI Assistant for specific guidance."
     },

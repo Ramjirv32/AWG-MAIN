@@ -10,10 +10,16 @@ export default function History() {
     const fetchHistory = async () => {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sensor/history`);
-        const json = await res.json();
-        setHistory(json);
+        if (res.status === 404) {
+          // Route not found - show message about using AWS DynamoDB
+          setHistory([]);
+        } else {
+          const json = await res.json();
+          setHistory(Array.isArray(json) ? json : []);
+        }
       } catch (err) {
         console.error(err);
+        setHistory([]);
       } finally {
         setLoading(false);
       }
@@ -82,10 +88,15 @@ export default function History() {
             </div>
           ) : history.length === 0 ? (
             <div className="bg-white rounded-xl shadow-lg p-12 text-center border-2 border-gray-100">
-              <div className="text-6xl mb-4">💧</div>
-              <p className="text-gray-900 text-2xl font-bold mb-2">No History Yet</p>
-              <p className="text-gray-500 text-lg">Wait for the first bottle to fill to 100%</p>
-              <p className="text-gray-400 text-sm mt-4">History records will appear here automatically</p>
+              <div className="text-6xl mb-4">�</div>
+              <p className="text-gray-900 text-2xl font-bold mb-2">History Not Available</p>
+              <p className="text-gray-500 text-lg">Historical data is now stored in AWS DynamoDB</p>
+              <p className="text-gray-400 text-sm mt-4">Please check the IoT Dashboard for real-time sensor data</p>
+              <div className="mt-6">
+                <a href="/iot-dashboard" className="inline-block bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                  Go to IoT Dashboard →
+                </a>
+              </div>
             </div>
           ) : (
             <div className="space-y-4">
@@ -137,13 +148,6 @@ export default function History() {
                         <p className="font-bold text-lg text-gray-900">{Number(h.avgTemp).toFixed(1)}°C</p>
                       </div>
                       
-                      <div className={`${h.avgTDS > 100 ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'} p-4 rounded-lg border`}>
-                        <p className={`text-xs ${h.avgTDS > 100 ? 'text-red-600' : 'text-green-600'} font-semibold mb-1 uppercase`}>Water Quality</p>
-                        <p className="font-bold text-lg text-gray-900">{Math.round(h.avgTDS)} ppm</p>
-                        <p className={`text-xs font-bold ${h.avgTDS > 100 ? 'text-red-600' : 'text-green-600'}`}>
-                          {h.avgTDS > 100 ? '⚠ Unsafe' : '✓ Safe'}
-                        </p>
-                      </div>
                       
                       <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <p className="text-xs text-gray-600 font-semibold mb-1 uppercase">Device</p>

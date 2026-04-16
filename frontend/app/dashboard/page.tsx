@@ -19,7 +19,10 @@ export default function Dashboard() {
   const [showDrinkModal, setShowDrinkModal] = useState(false);
   const [remainingLevel, setRemainingLevel] = useState(70);
 
-  const fmt = (n: number, d: number = 1) => Number(n.toFixed(d));
+  const fmt = (n: number | undefined, d: number = 1) => {
+    if (n === undefined || n === null) return 0;
+    return Number(n.toFixed(d));
+  };
 
   // Add toast notification
   const addToast = (message: string, level: string) => {
@@ -67,7 +70,19 @@ export default function Dashboard() {
       try {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/sensor/latest`);
         const json = await res.json();
-        setData(json.sensor || json);
+        
+        // Map AWS fields to expected dashboard fields
+        const awsData = json.sensor || json;
+        const mappedData = {
+          ...awsData,
+          waterLevel: awsData.water_level || 0,
+          temp: awsData.temperature || 0,
+          humidity: awsData.humidity || 0,
+          battery: awsData.battery || 80, // Default good value
+          trend: awsData.trend || 'stable',
+          flowRate: awsData.flow_rate || 0.5
+        };
+        setData(mappedData);
         
         // Only show NEW alerts as toasts (not historical ones)
         const newAlerts = json.alerts || [];
@@ -203,11 +218,6 @@ export default function Dashboard() {
               {data.trend && <p className="text-xs text-gray-900 mt-2 capitalize font-medium">{data.trend}</p>}
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
-              <p className="text-gray-900 text-sm font-semibold mb-2 uppercase tracking-wide">Water Quality</p>
-              <p className="text-4xl font-bold text-green-600">{fmt(data.tds, 0)} <span className="text-lg text-gray-900">ppm</span></p>
-              <p className="text-sm text-gray-900 mt-3 font-medium">{data.tds > 100 ? '❌ Unsafe' : '✅ Safe to Drink'}</p>
-            </div>
 
             <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow border border-gray-100">
               <p className="text-gray-900 text-sm font-semibold mb-2 uppercase tracking-wide">Battery</p>
@@ -316,21 +326,6 @@ export default function Dashboard() {
                 </div>
                 <div>
                   <div className="flex justify-between items-center mb-2">
-                    <span className="text-gray-700 font-medium text-sm">Water Quality (TDS)</span>
-                    <span className="font-bold text-gray-900">{fmt(data.tds, 0)} ppm</span>
-                  </div>
-                  <div className="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-                    <div 
-                      className={`h-3 rounded-full transition-all duration-500 ${
-                        data.tds > 100 ? 'bg-gradient-to-r from-red-400 to-red-600' : 'bg-gradient-to-r from-green-400 to-green-600'
-                      }`}
-                      style={{width: `${Math.min((data.tds / 200) * 100, 100)}%`}}
-                    ></div>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-1">{data.tds > 100 ? 'Unsafe' : 'Safe'}</p>
-                </div>
-                <div>
-                  <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-700 font-medium text-sm">Battery</span>
                     <span className="font-bold text-gray-900">{fmt(data.battery, 0)}%</span>
                   </div>
@@ -391,32 +386,6 @@ export default function Dashboard() {
                   <div>
                     <p className="font-bold text-yellow-900">Low Humidity</p>
                     <p className="text-xs text-yellow-700">Slow production</p>
-                  </div>
-                </div>
-              )}
-              {data.tds > 100 && (
-                <div className="p-4 bg-red-50 border-2 border-red-200 rounded-xl flex items-center gap-3">
-                  <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-bold text-red-900">Unsafe Water</p>
-                    <p className="text-xs text-red-700">Do not drink</p>
-                  </div>
-                </div>
-              )}
-              {data.tds <= 100 && (
-                <div className="p-4 bg-green-50 border-2 border-green-200 rounded-xl flex items-center gap-3">
-                  <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  </div>
-                  <div>
-                    <p className="font-bold text-green-900">Safe Water</p>
-                    <p className="text-xs text-green-700">Good quality</p>
                   </div>
                 </div>
               )}

@@ -6,7 +6,6 @@ const sensorSchema = new mongoose.Schema({
   humidity: { type: Number, required: true },
   temp: { type: Number, required: true },
   waterTemp: { type: Number, required: true },
-  tds: { type: Number, required: true },
   flowRate: { type: Number, required: true },
   battery: { type: Number, required: true },
   trend: { type: String, default: 'increasing' },

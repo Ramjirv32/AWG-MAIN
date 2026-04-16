@@ -10,7 +10,6 @@ let lastGoodValues = {
   humidity: 65,
   temp: 25,
   waterTemp: 20,
-  tds: 50,
   flowRate: 0.5,
   battery: 80
 };
@@ -84,7 +83,6 @@ const genData = async () => {
           humidity: validate(Math.floor(rand(50, 85)), 10, 100, lastGoodValues.humidity),
           temp: validate(Math.floor(rand(20, 35)), -10, 60, lastGoodValues.temp),
           waterTemp: validate(Math.floor(rand(15, 30)), 0, 50, lastGoodValues.waterTemp),
-          tds: validate(Math.floor(rand(20, 90)), 0, 500, lastGoodValues.tds),
           flowRate: validate(parseFloat(rand(0.2, 1.0).toFixed(2)), 0, 5, lastGoodValues.flowRate),
           battery: validate(Math.floor(rand(40, 100)), 0, 100, lastGoodValues.battery),
           trend: 'full'
@@ -105,7 +103,6 @@ const genData = async () => {
     let rawHumidity = Math.floor(rand(50, 85));
     let rawTemp = Math.floor(rand(20, 35));
     let rawWaterTemp = Math.floor(rand(15, 30));
-    let rawTds = Math.floor(rand(20, 90));
     let rawFlowRate = parseFloat(rand(0.2, 1.0).toFixed(2));
     let rawBattery = Math.floor(rand(40, 100));
 
@@ -119,7 +116,6 @@ const genData = async () => {
     const validHumidity = validate(rawHumidity, 10, 100, lastGoodValues.humidity);
     const validTemp = validate(rawTemp, -10, 60, lastGoodValues.temp);
     const validWaterTemp = validate(rawWaterTemp, 0, 50, lastGoodValues.waterTemp);
-    const validTds = validate(rawTds, 0, 500, lastGoodValues.tds);
     const validFlowRate = validate(rawFlowRate, 0, 5, lastGoodValues.flowRate);
     const validBattery = validate(rawBattery, 0, 100, lastGoodValues.battery);
 
@@ -128,7 +124,6 @@ const genData = async () => {
       humidity: validHumidity,
       temp: validTemp,
       waterTemp: validWaterTemp,
-      tds: validTds,
       flowRate: validFlowRate,
       battery: validBattery
     };
@@ -139,7 +134,6 @@ const genData = async () => {
       humidity: validHumidity,
       temp: validTemp,
       waterTemp: validWaterTemp,
-      tds: validTds,
       flowRate: parseFloat(validFlowRate.toFixed(2)),
       battery: validBattery,
       trend
@@ -164,7 +158,6 @@ const saveHistory = async () => {
   const avgFlow = all.reduce((s, r) => s + r.flowRate, 0) / all.length;
   const avgHum = all.reduce((s, r) => s + r.humidity, 0) / all.length;
   const avgTemp = all.reduce((s, r) => s + r.temp, 0) / all.length;
-  const avgTDS = all.reduce((s, r) => s + r.tds, 0) / all.length;
   
   const start = all[0].timestamp;
   const end = all[all.length - 1].timestamp;
@@ -178,7 +171,6 @@ const saveHistory = async () => {
     avgFlowRate: parseFloat(avgFlow.toFixed(2)),
     avgHumidity: Math.floor(avgHum),
     avgTemp: Math.floor(avgTemp),
-    avgTDS: Math.floor(avgTDS),
     fillDuration: duration,
     totalReadings: all.length
   });
@@ -231,16 +223,6 @@ const checkAlerts = async (data) => {
       level: 'low',
       message: '🔔 Low humidity affects production',
       value: data.humidity
-    });
-  }
-
-  if (data.tds > 100) {
-    alerts.push({
-      deviceId: data.deviceId,
-      type: 'water_quality',
-      level: 'critical',
-      message: 'Water quality unsafe - High TDS',
-      value: data.tds
     });
   }
 

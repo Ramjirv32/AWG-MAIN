@@ -1,0 +1,71 @@
+1. ESP32 SIDE (DEVICE SECURITY)
+Store inside ESP32:
+device_id → e.g. bottle_001
+device_secret → random string
+When sending data:
+
+ESP32 sends:
+
+device_id
+device_secret
+timestamp
+sensor data
+
+👉 Use HTTPS only (VERY IMPORTANT)
+
+☁️ 2. BACKEND (AWS / API)
+When request comes:
+
+✔ Step 1: Find device using device_id
+✔ Step 2: Compare hashed secret in DB
+✔ Step 3: Check timestamp (prevent replay)
+
+👉 If valid → store in DynamoDB
+👉 If not → reject ❌
+
+🗄️ 3. DATABASE STRUCTURE
+Devices Table
+device_id
+device_secret_hash
+user_id
+Users Table
+user_id
+email
+password (hashed)
+🛒 4. USER BUY FLOW (VERY IMPORTANT)
+
+When user buys device:
+
+Device has printed device_id (or QR code)
+User signs up
+User enters device_id
+
+Backend links:
+
+device → user
+
+👉 Now device belongs to that user
+
+🔐 5. USER LOGIN FLOW
+User logs in (email + password)
+Backend gives JWT token
+Dashboard requests use token
+📊 6. DATA ACCESS (SECURE)
+
+When fetching data:
+
+👉 Backend only returns:
+
+data where user_id = logged_in_user
+
+✔ User sees ONLY their device
+❌ Cannot access others
+
+🚀 FINAL FLOW (SIMPLE VIEW)
+ESP32 → (device_id + secret + timestamp)
+        ↓
+Backend → verify → store in DB
+        ↓
+User login → gets token
+        ↓
+Dashboard → fetch only user’s device data

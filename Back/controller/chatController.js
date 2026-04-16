@@ -19,7 +19,6 @@ const chat = async (req, res) => {
     const avg = {
       water: Math.floor(recent.reduce((s, r) => s + r.waterLevel, 0) / recent.length),
       hum: Math.floor(recent.reduce((s, r) => s + r.humidity, 0) / recent.length),
-      tds: Math.floor(recent.reduce((s, r) => s + r.tds, 0) / recent.length),
       flow: parseFloat((recent.reduce((s, r) => s + r.flowRate, 0) / recent.length).toFixed(2)),
       temp: Math.floor(recent.reduce((s, r) => s + r.temp, 0) / recent.length)
     };
@@ -42,7 +41,6 @@ Current sensor data:
 - Humidity: ${latest.humidity}%
 - Temperature: ${latest.temp}°C
 - Water Temperature: ${latest.waterTemp}°C
-- TDS (water quality): ${latest.tds} ppm
 - Flow Rate: ${latest.flowRate} L/min
 - Battery: ${latest.battery}%
 
@@ -50,7 +48,6 @@ Recent trends (last 10 readings):
 - Avg Water Level: ${avg.water}%
 - Avg Humidity: ${avg.hum}% (${humTrend > 0 ? 'rising' : humTrend < 0 ? 'falling' : 'stable'})
 - Avg Temperature: ${avg.temp}°C
-- Avg TDS: ${avg.tds} ppm
 - Avg Flow Rate: ${avg.flow} L/min
 - Water increasing: ${waterTrend > 0 ? `+${waterTrend}% recently` : 'slowly'}
 
@@ -58,7 +55,6 @@ ${chatHistory}
 
 Smart insights:
 ${latest.humidity < 55 ? '- Low humidity is affecting production efficiency\n' : ''}
-${latest.tds > 100 ? '- Water quality is unsafe due to high TDS\n' : ''}
 ${latest.battery < 25 ? '- Battery needs charging soon\n' : ''}
 ${latest.flowRate < 0.2 ? '- Production rate is very low\n' : ''}
 ${humTrend > 5 ? '- Humidity is rising, production should improve\n' : ''}
@@ -94,7 +90,6 @@ User question: ${msg}`;
       context: {
         waterLevel: latest.waterLevel,
         humidity: latest.humidity,
-        tds: latest.tds,
         battery: latest.battery,
         trend: latest.trend
       }

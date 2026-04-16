@@ -33,7 +33,6 @@ const aiChat = async (req, res) => {
     // Calculate statistics
     const avgFlowRate = (recentReadings.reduce((s, r) => s + r.flowRate, 0) / recentReadings.length).toFixed(2);
     const avgHumidity = Math.round(recentReadings.reduce((s, r) => s + r.humidity, 0) / recentReadings.length);
-    const avgTDS = Math.round(recentReadings.reduce((s, r) => s + r.tds, 0) / recentReadings.length);
     const waterTrend = recentReadings.length >= 5 ? recentReadings[0].waterLevel - recentReadings[4].waterLevel : 0;
     const humidityTrend = recentReadings.length >= 5 ? recentReadings[0].humidity - recentReadings[4].humidity : 0;
     
@@ -47,15 +46,13 @@ const aiChat = async (req, res) => {
         humidity: latestSensor.humidity,
         temperature: latestSensor.temp,
         waterTemperature: latestSensor.waterTemp,
-        tds: latestSensor.tds,
         flowRate: latestSensor.flowRate,
         battery: latestSensor.battery,
         timestamp: latestSensor.timestamp
       },
       averages: {
         flowRate: Number(avgFlowRate),
-        humidity: avgHumidity,
-        tds: avgTDS
+        humidity: avgHumidity
       },
       trends: {
         water: waterTrend,
@@ -96,15 +93,13 @@ const aiChat = async (req, res) => {
           waterLevel: latestSensor.waterLevel,
           humidity: latestSensor.humidity,
           flowRate: latestSensor.flowRate,
-          tds: latestSensor.tds,
           battery: latestSensor.battery,
           temp: latestSensor.temp,
           trend: latestSensor.trend
         },
         averages: {
           flowRate: avgFlowRate,
-          humidity: avgHumidity,
-          tds: avgTDS
+          humidity: avgHumidity
         },
         trends: {
           water: waterTrend,
@@ -146,9 +141,6 @@ const getAIContext = async (req, res) => {
           : 0,
         humidity: recentReadings.length > 0 
           ? Math.round(recentReadings.reduce((s, r) => s + r.humidity, 0) / recentReadings.length)
-          : 0,
-        tds: recentReadings.length > 0 
-          ? Math.round(recentReadings.reduce((s, r) => s + r.tds, 0) / recentReadings.length)
           : 0,
       },
       history: {
