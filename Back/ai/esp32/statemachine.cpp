@@ -115,12 +115,14 @@ int check_battery_low() {
     if (g_sensor_valid.battery < 40.0f) return 1;
     return 0;
 }
+
 bool safety_gate() {
     if (check_freeze() || check_water_leak() || check_mcu_temperature() == 2) return true;
     if (check_fan_rpm() || check_sensor_stuck() || check_heater_dry_run()) return true;
     if (check_battery_low() == 2 || check_tds_trend() == 2) return true;
     return false;
 }
+
 struct TimeFeatures {
     float temp_delta;
     float humidity_delta;
@@ -379,12 +381,13 @@ void sensor_read_real() {
     g_sensor.water_level = 50.0f;
     g_sensor.mcu_temp    = 40.0f;
     g_sensor.rpm         = 1000;
-    g_sensor.rgb_state   = 0; // Defaulting to 0, can be updated if hardware exists
+    g_sensor.rgb_state   = 0; 
 
     // Debug Prints
     Serial.printf("[REAL] T=%.1f H=%.1f TDS=%.1f F=%.1f\n", 
                   g_sensor.temp, g_sensor.humidity, g_sensor.tds, g_sensor.flow);
 }
+
 void sensor_validate() {
     if (g_sensor.temp >= -20 && g_sensor.temp <= 80)
         g_sensor_valid.temp = g_sensor.temp;
@@ -405,6 +408,7 @@ void sensor_validate() {
     // Fix: Move RPM to validated structure to prevent safety trip
     g_sensor_valid.rpm = g_sensor.rpm; 
 }
+
 int sensor_range_check() {
     if (g_sensor_valid.temp        < -20 || g_sensor_valid.temp        >  80) return 1;
     if (g_sensor_valid.humidity    <   0 || g_sensor_valid.humidity    > 100) return 1;
@@ -431,6 +435,7 @@ int apply_hysteresis(int new_mode, float cur_hum, float cur_temp, float prev_hum
     g_mode_start_ms = now;
     return new_mode;
 }
+
 int check_fan_speed_validation(int expected_rpm) {
     const int MIN_RPM = 500;
     const int MAX_RPM = 3000;

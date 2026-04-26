@@ -2,14 +2,18 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+
 import os, struct, warnings
 warnings.filterwarnings('ignore')
+
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers, callbacks
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import classification_report, confusion_matrix
 from sklearn.model_selection import train_test_split
+
+
 print(f"TensorFlow  : {tf.__version__}")
 print(f"Keras       : {keras.__version__}")
 print("Dependencies loaded ✅")
@@ -22,7 +26,9 @@ df = df.sort_values('timestamp').reset_index(drop=True)
 df = df[df['confidence_human'] >= 0.70].reset_index(drop=True)
 print(f"After filter: {df.shape}  (confidence ≥ 0.70)")
 print(f"\nMode distribution:\n{df['target_mode'].value_counts().sort_index()}")
+
 WINDOW = 3   
+
 for col in ['temp', 'humidity', 'flow']:
     df[f'{col}_avg{WINDOW}'] = df[col].rolling(WINDOW, min_periods=1).mean()
     df[f'{col}_delta']       = df[col].diff().fillna(0).clip(-20, 20)
