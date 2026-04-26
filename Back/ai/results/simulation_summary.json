@@ -1,0 +1,2181 @@
+{
+  "simulation_info": {
+    "total_data_points": 8640,
+    "sampling_interval": "Every 100 steps",
+    "simulation_duration": "24 hours",
+    "date_generated": "2026-04-23T06:47:58.113Z"
+  },
+  "mode_distribution": {
+    "IDLE": 0,
+    "LOW": 0,
+    "NORMAL": 0,
+    "HIGH": 0,
+    "REGEN": 0
+  },
+  "safety_gate": {
+    "total_blocks": 16,
+    "block_rate": "18.52%"
+  },
+  "hourly_summary": [
+    {
+      "hour": "00:00 - 01:00",
+      "time_of_day": "Night",
+      "temperature": {
+        "avg": 22.6,
+        "min": 22.1,
+        "max": 23.2,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 92.6,
+        "min": 90.6,
+        "max": 94.4,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 448.33,
+      "extraction_efficiency": 7.3,
+      "power_consumption_estimated": 0.117,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.27,
+        "humidity_delta": 0.93,
+        "mcu_heat_delta": 18.79
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 10,
+        "end": 20.2,
+        "net_change": 10.2,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 16,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 6.8,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 41.4,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 1,
+        "status": "Wet",
+        "color": "Blue (Wet)"
+      },
+      "motor_speed": {
+        "avg": 6.8,
+        "unit": "RPM (estimated)",
+        "status": "Medium",
+        "duty_cycle": "34%"
+      }
+    },
+    {
+      "hour": "01:00 - 02:00",
+      "time_of_day": "Night",
+      "temperature": {
+        "avg": 22.1,
+        "min": 21.8,
+        "max": 22.4,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 94.7,
+        "min": 93.6,
+        "max": 95.5,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 473.33,
+      "extraction_efficiency": 7.5,
+      "power_consumption_estimated": 0.121,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.08,
+        "humidity_delta": 0.45,
+        "mcu_heat_delta": 19.14
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 23.7,
+        "end": 34.4,
+        "net_change": 10.7,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 28.6,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 7.1,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 41.2,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 1,
+        "status": "Wet",
+        "color": "Blue (Wet)"
+      },
+      "motor_speed": {
+        "avg": 7.1,
+        "unit": "RPM (estimated)",
+        "status": "Medium",
+        "duty_cycle": "36%"
+      }
+    },
+    {
+      "hour": "02:00 - 03:00",
+      "time_of_day": "Night",
+      "temperature": {
+        "avg": 22.1,
+        "min": 21.8,
+        "max": 22.4,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 94.7,
+        "min": 93.7,
+        "max": 95.5,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 355,
+      "extraction_efficiency": 7.5,
+      "power_consumption_estimated": 0.121,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.07,
+        "humidity_delta": -0.33,
+        "mcu_heat_delta": 19.14
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 38,
+        "end": 45.1,
+        "net_change": 7.1,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 41.5,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 7.1,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 41.2,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 1,
+        "status": "Wet",
+        "color": "Blue (Wet)"
+      },
+      "motor_speed": {
+        "avg": 7.1,
+        "unit": "RPM (estimated)",
+        "status": "Medium",
+        "duty_cycle": "36%"
+      }
+    },
+    {
+      "hour": "03:00 - 04:00",
+      "time_of_day": "Night",
+      "temperature": {
+        "avg": 22.6,
+        "min": 22.1,
+        "max": 23.2,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 92.7,
+        "min": 90.6,
+        "max": 94.3,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 455,
+      "extraction_efficiency": 7.3,
+      "power_consumption_estimated": 0.118,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.22,
+        "humidity_delta": -0.85,
+        "mcu_heat_delta": 18.79
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 48.7,
+        "end": 58.9,
+        "net_change": 10.2,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 54.1,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 6.8,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 41.4,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 1,
+        "status": "Wet",
+        "color": "Blue (Wet)"
+      },
+      "motor_speed": {
+        "avg": 6.8,
+        "unit": "RPM (estimated)",
+        "status": "Medium",
+        "duty_cycle": "34%"
+      }
+    },
+    {
+      "hour": "04:00 - 05:00",
+      "time_of_day": "Night",
+      "temperature": {
+        "avg": 23.7,
+        "min": 22.9,
+        "max": 24.5,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 88.8,
+        "min": 85.8,
+        "max": 91.2,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 311.67,
+      "extraction_efficiency": 6.9,
+      "power_consumption_estimated": 0.112,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.37,
+        "humidity_delta": -1.03,
+        "mcu_heat_delta": 18.12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 62.1,
+        "end": 68.3,
+        "net_change": 6.2,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 65.8,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 6.1,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 41.8,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 1,
+        "status": "Wet",
+        "color": "Blue (Wet)"
+      },
+      "motor_speed": {
+        "avg": 6.1,
+        "unit": "RPM (estimated)",
+        "status": "Medium",
+        "duty_cycle": "31%"
+      }
+    },
+    {
+      "hour": "05:00 - 06:00",
+      "time_of_day": "Night",
+      "temperature": {
+        "avg": 25.1,
+        "min": 24.2,
+        "max": 26.2,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 83.2,
+        "min": 79.8,
+        "max": 86.6,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 353.33,
+      "extraction_efficiency": 6.2,
+      "power_consumption_estimated": 0.103,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.38,
+        "humidity_delta": -1.57,
+        "mcu_heat_delta": 17.16
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 71.2,
+        "end": 79.1,
+        "net_change": 7.9,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 76,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 5.2,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 42.3,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 1,
+        "status": "Wet",
+        "color": "Blue (Wet)"
+      },
+      "motor_speed": {
+        "avg": 5.2,
+        "unit": "RPM (estimated)",
+        "status": "Medium",
+        "duty_cycle": "26%"
+      }
+    },
+    {
+      "hour": "06:00 - 07:00",
+      "time_of_day": "Morning",
+      "temperature": {
+        "avg": 26.9,
+        "min": 25.8,
+        "max": 28.1,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 76.5,
+        "min": 72.5,
+        "max": 80.4,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 266.67,
+      "extraction_efficiency": 5.2,
+      "power_consumption_estimated": 0.09,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.57,
+        "humidity_delta": -1.95,
+        "mcu_heat_delta": 15.99
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 81.4,
+        "end": 87.3,
+        "net_change": 5.9,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 84.2,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 4,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 42.9,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 4,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "20%"
+      }
+    },
+    {
+      "hour": "07:00 - 08:00",
+      "time_of_day": "Morning",
+      "temperature": {
+        "avg": 28.9,
+        "min": 27.8,
+        "max": 30.1,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 68.9,
+        "min": 64.8,
+        "max": 73.1,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 131.67,
+      "extraction_efficiency": 3.9,
+      "power_consumption_estimated": 0.076,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.57,
+        "humidity_delta": -2.43,
+        "mcu_heat_delta": 14.68
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Moderate"
+      },
+      "water_level_change": {
+        "start": 88.9,
+        "end": 91.6,
+        "net_change": 2.7,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 90.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 2.7,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 43.6,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 2.7,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "13%"
+      }
+    },
+    {
+      "hour": "08:00 - 09:00",
+      "time_of_day": "Morning",
+      "temperature": {
+        "avg": 31,
+        "min": 29.9,
+        "max": 32.2,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 61.1,
+        "min": 57,
+        "max": 65.3,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 78.33,
+      "extraction_efficiency": 1.6,
+      "power_consumption_estimated": 0.062,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.57,
+        "humidity_delta": -2.05,
+        "mcu_heat_delta": 13
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Moderate"
+      },
+      "water_level_change": {
+        "start": 92.7,
+        "end": 94.3,
+        "net_change": 1.6,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 93.8,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 1,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 44,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 1,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "5%"
+      }
+    },
+    {
+      "hour": "09:00 - 10:00",
+      "time_of_day": "Morning",
+      "temperature": {
+        "avg": 33,
+        "min": 31.9,
+        "max": 34.1,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 53.6,
+        "min": 49.7,
+        "max": 57.5,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 0,
+      "extraction_efficiency": 0,
+      "power_consumption_estimated": 0.05,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.5,
+        "humidity_delta": -2,
+        "mcu_heat_delta": 12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Moderate"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 94.3,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 0,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 45,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 0,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "0%"
+      }
+    },
+    {
+      "hour": "10:00 - 11:00",
+      "time_of_day": "Morning",
+      "temperature": {
+        "avg": 34.9,
+        "min": 33.8,
+        "max": 35.8,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 46.8,
+        "min": 43.4,
+        "max": 50.4,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 0,
+      "extraction_efficiency": 0,
+      "power_consumption_estimated": 0.05,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.53,
+        "humidity_delta": -1.85,
+        "mcu_heat_delta": 12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 94.3,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 0,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 46.9,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 0,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "0%"
+      }
+    },
+    {
+      "hour": "11:00 - 12:00",
+      "time_of_day": "Morning",
+      "temperature": {
+        "avg": 36.3,
+        "min": 35.5,
+        "max": 37.1,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 41.3,
+        "min": 38.6,
+        "max": 44.3,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 0,
+      "extraction_efficiency": 0,
+      "power_consumption_estimated": 0.05,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.32,
+        "humidity_delta": -1.32,
+        "mcu_heat_delta": 12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 94.3,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 0,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 48.3,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 0,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "0%"
+      }
+    },
+    {
+      "hour": "12:00 - 13:00",
+      "time_of_day": "Afternoon",
+      "temperature": {
+        "avg": 37.4,
+        "min": 36.8,
+        "max": 37.9,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 37.3,
+        "min": 35.6,
+        "max": 39.1,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 0,
+      "extraction_efficiency": 0,
+      "power_consumption_estimated": 0.05,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.33,
+        "humidity_delta": -0.93,
+        "mcu_heat_delta": 12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 94.3,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 0,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 49.4,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 0,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "0%"
+      }
+    },
+    {
+      "hour": "13:00 - 14:00",
+      "time_of_day": "Afternoon",
+      "temperature": {
+        "avg": 37.9,
+        "min": 37.6,
+        "max": 38.2,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 35.3,
+        "min": 34.5,
+        "max": 36.5,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 0,
+      "extraction_efficiency": 0,
+      "power_consumption_estimated": 0.05,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": 0.08,
+        "humidity_delta": -0.3,
+        "mcu_heat_delta": 12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 94.3,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 0,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 49.9,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 0,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "0%"
+      }
+    },
+    {
+      "hour": "14:00 - 15:00",
+      "time_of_day": "Afternoon",
+      "temperature": {
+        "avg": 37.9,
+        "min": 37.6,
+        "max": 38.2,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 35.4,
+        "min": 34.5,
+        "max": 36.4,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 0,
+      "extraction_efficiency": 0,
+      "power_consumption_estimated": 0.05,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.07,
+        "humidity_delta": 0,
+        "mcu_heat_delta": 12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 94.3,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 0,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 49.9,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 0,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "0%"
+      }
+    },
+    {
+      "hour": "15:00 - 16:00",
+      "time_of_day": "Afternoon",
+      "temperature": {
+        "avg": 37.4,
+        "min": 36.8,
+        "max": 37.9,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 37.3,
+        "min": 35.7,
+        "max": 39.3,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 0,
+      "extraction_efficiency": 0,
+      "power_consumption_estimated": 0.05,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.25,
+        "humidity_delta": 0.7,
+        "mcu_heat_delta": 12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 94.3,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 0,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 49.4,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 0,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "0%"
+      }
+    },
+    {
+      "hour": "16:00 - 17:00",
+      "time_of_day": "Afternoon",
+      "temperature": {
+        "avg": 36.3,
+        "min": 35.5,
+        "max": 37.1,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 41.3,
+        "min": 38.7,
+        "max": 44.2,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 0,
+      "extraction_efficiency": 0,
+      "power_consumption_estimated": 0.05,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.32,
+        "humidity_delta": 1.28,
+        "mcu_heat_delta": 12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 94.3,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 0,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 48.3,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 0,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "0%"
+      }
+    },
+    {
+      "hour": "17:00 - 18:00",
+      "time_of_day": "Afternoon",
+      "temperature": {
+        "avg": 34.9,
+        "min": 33.9,
+        "max": 35.8,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 46.8,
+        "min": 43.5,
+        "max": 50.4,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 0,
+      "extraction_efficiency": 0,
+      "power_consumption_estimated": 0.05,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.43,
+        "humidity_delta": 1.83,
+        "mcu_heat_delta": 12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 94.3,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 0,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 46.9,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 0,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "0%"
+      }
+    },
+    {
+      "hour": "18:00 - 19:00",
+      "time_of_day": "Evening",
+      "temperature": {
+        "avg": 33.1,
+        "min": 32,
+        "max": 34.2,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 53.5,
+        "min": 49.7,
+        "max": 57.6,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 0,
+      "extraction_efficiency": 0,
+      "power_consumption_estimated": 0.05,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 0,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.47,
+        "humidity_delta": 1.97,
+        "mcu_heat_delta": 12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 94.3,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.3,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 0,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 45.1,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 0,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "0%"
+      }
+    },
+    {
+      "hour": "19:00 - 20:00",
+      "time_of_day": "Evening",
+      "temperature": {
+        "avg": 31,
+        "min": 29.8,
+        "max": 32.2,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 61.1,
+        "min": 56.9,
+        "max": 65.4,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 46.67,
+      "extraction_efficiency": 1.6,
+      "power_consumption_estimated": 0.059,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 1,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.6,
+        "humidity_delta": 2.03,
+        "mcu_heat_delta": 13
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Moderate"
+      },
+      "water_level_change": {
+        "start": 94.3,
+        "end": 95.2,
+        "net_change": 0.9,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 94.8,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 1,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 44,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 1,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "5%"
+      }
+    },
+    {
+      "hour": "20:00 - 21:00",
+      "time_of_day": "Evening",
+      "temperature": {
+        "avg": 29,
+        "min": 27.8,
+        "max": 30.1,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 68.9,
+        "min": 64.6,
+        "max": 73.2,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 170,
+      "extraction_efficiency": 3.9,
+      "power_consumption_estimated": 0.076,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 4,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.62,
+        "humidity_delta": 2.17,
+        "mcu_heat_delta": 14.67
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Moderate"
+      },
+      "water_level_change": {
+        "start": 96.1,
+        "end": 99.9,
+        "net_change": 3.8,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 98.2,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 2.7,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 43.6,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 2.7,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "13%"
+      }
+    },
+    {
+      "hour": "21:00 - 22:00",
+      "time_of_day": "Evening",
+      "temperature": {
+        "avg": 27,
+        "min": 25.9,
+        "max": 28.1,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 76.4,
+        "min": 72.4,
+        "max": 80.2,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 268.33,
+      "extraction_efficiency": 5.2,
+      "power_consumption_estimated": 0.09,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 4,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.53,
+        "humidity_delta": 2,
+        "mcu_heat_delta": 15.98
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Moderate"
+      },
+      "water_level_change": {
+        "start": 100,
+        "end": 100,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 100,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 4,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 42.9,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 0,
+        "status": "Dry",
+        "color": "Off (Dry)"
+      },
+      "motor_speed": {
+        "avg": 4,
+        "unit": "RPM (estimated)",
+        "status": "Low",
+        "duty_cycle": "20%"
+      }
+    },
+    {
+      "hour": "22:00 - 23:00",
+      "time_of_day": "Evening",
+      "temperature": {
+        "avg": 25.1,
+        "min": 24.2,
+        "max": 26.2,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 83.2,
+        "min": 79.7,
+        "max": 86.6,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 256.67,
+      "extraction_efficiency": 6.2,
+      "power_consumption_estimated": 0.101,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 3,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.5,
+        "humidity_delta": 1.63,
+        "mcu_heat_delta": 17.16
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 100,
+        "end": 100,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 100,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 5.2,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 42.3,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 1,
+        "status": "Wet",
+        "color": "Blue (Wet)"
+      },
+      "motor_speed": {
+        "avg": 5.2,
+        "unit": "RPM (estimated)",
+        "status": "Medium",
+        "duty_cycle": "26%"
+      }
+    },
+    {
+      "hour": "23:00 - 24:00",
+      "time_of_day": "Evening",
+      "temperature": {
+        "avg": 23.7,
+        "min": 22.9,
+        "max": 24.5,
+        "unit": "°C"
+      },
+      "humidity": {
+        "avg": 88.7,
+        "min": 85.8,
+        "max": 91.3,
+        "unit": "%"
+      },
+      "ml_mode_distribution": {
+        "IDLE": 0,
+        "LOW": 0,
+        "NORMAL": 0,
+        "HIGH": 0,
+        "REGEN": 0
+      },
+      "ai_confidence": {
+        "avg": 0,
+        "min": 0,
+        "max": 0,
+        "unit": "%"
+      },
+      "fallback_count": 0,
+      "water_harvested_total": 408.33,
+      "extraction_efficiency": 6.9,
+      "power_consumption_estimated": 0.111,
+      "safety_triggers": {
+        "mcu_overheat": 0,
+        "tank_full": 4,
+        "leak": 0,
+        "freeze": 0,
+        "tds_high": 0,
+        "battery_low": 0
+      },
+      "delta_averages": {
+        "temp_delta": -0.28,
+        "humidity_delta": 1.63,
+        "mcu_heat_delta": 18.12
+      },
+      "environment_stability": {
+        "temp_stability": "Stable",
+        "humidity_stability": "Stable"
+      },
+      "water_level_change": {
+        "start": 100,
+        "end": 100,
+        "net_change": 0,
+        "unit": "%"
+      },
+      "water_level": {
+        "avg": 100,
+        "unit": "%"
+      },
+      "flow_rate": {
+        "avg": 6.1,
+        "unit": "L/min"
+      },
+      "mcu_temperature": {
+        "avg": 41.8,
+        "unit": "°C"
+      },
+      "battery": {
+        "level": 85,
+        "unit": "%",
+        "status": "Normal",
+        "voltage": "12.6V"
+      },
+      "tds": {
+        "value": 250,
+        "unit": "ppm",
+        "status": "Safe"
+      },
+      "rgb_sensor": {
+        "state": 1,
+        "status": "Wet",
+        "color": "Blue (Wet)"
+      },
+      "motor_speed": {
+        "avg": 6.1,
+        "unit": "RPM (estimated)",
+        "status": "Medium",
+        "duty_cycle": "31%"
+      }
+    }
+  ]
+}

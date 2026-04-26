@@ -9,7 +9,7 @@ export default function IoTDashboard() {
 
   const fetchData = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/data");
+      const res = await fetch("http://localhost:3000/api/simulation/latest");
       const json = await res.json();
       
       if (json.status === "offline") {
@@ -17,9 +17,7 @@ export default function IoTDashboard() {
       } else if (json.status === "error") {
         setStatus("error");
       } else {
-        // Assuming json is an array or object with sensor values
-        const latestInfo = Array.isArray(json) ? json[json.length - 1] : json;
-        setData(latestInfo);
+        setData(json);
         setStatus("online");
         setLastUpdated(0); // Reset timer on successful fetch
       }
@@ -42,9 +40,9 @@ export default function IoTDashboard() {
     };
   }, []);
 
-  // Placeholder values as requested
-  const flowRate = "2.3 L/min";
-  const batteryStatus = "80% 🔋";
+  // Use actual data or fallback
+  const flowRate = data?.flow ? `${data.flow.toFixed(2)} ml/min` : "0.00 ml/min";
+  const batteryStatus = data?.battery ? `${data.battery}% 🔋` : "80% 🔋";
 
   return (
     <div className="min-h-screen bg-[#0f172a] text-white p-6 md:p-10 font-sans">
@@ -66,7 +64,7 @@ export default function IoTDashboard() {
       </div>
 
       {/* MAIN AREA (Grid Cards) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Temperature Card */}
         <DashboardCard
           label="Temperature"
@@ -97,6 +95,14 @@ export default function IoTDashboard() {
           value={`${data?.water_level || "75"}% (${getWaterLevelLabel(data?.water_level || 75)})`}
           icon="🛢"
           color="text-blue-500"
+        />
+
+        {/* Mode Card */}
+        <DashboardCard
+          label="Current Mode"
+          value={data?.mode || "IDLE"}
+          icon="⚡"
+          color="text-yellow-400"
         />
 
         {/* Battery Status Card */}

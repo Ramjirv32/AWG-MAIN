@@ -1,0 +1,8 @@
+# Generated docs
+*.pdf
+*.docx
+!templates/
+
+# System files
+.DS_Store
+Thumbs.db
