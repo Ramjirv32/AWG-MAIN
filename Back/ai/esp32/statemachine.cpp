@@ -4,7 +4,7 @@
 #include <math.h>
 #include "model.h"
 #include <Arduino.h>
-#include <DHT.h>           // Added DHT Library
+#include <DHT.h>           
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
 #include "tensorflow/lite/micro/micro_mutable_op_resolver.h"
@@ -35,17 +35,18 @@ struct SensorReading {
 #define PIN_FAN         25
 #define PIN_HEATER      26
 #define PIN_MOTOR       27
-#define PIN_RED          2  // DANGER / SAFETY
-#define PIN_GREEN       12  // PRODUCTION
-#define PIN_WHITE       14  // IDLE / POWER
-#define PIN_DHT          4  // DHT11 Data pin (Safe GPIO)
-#define PIN_TDS         34  // TDS Analog pin
-#define PIN_FLOW        35  // Flow pulse pin
-#define PIN_BTN_HEATER  18  // Heater toggle button
-#define PIN_BTN_MODE    19  // Fan mode/power button
+#define PIN_RED          2  
+#define PIN_GREEN       12  
+#define PIN_WHITE       14  
+#define PIN_BUZZER      13  
+#define PIN_DHT          4  
+#define PIN_TDS         34  
+#define PIN_FLOW        35  
+#define PIN_BTN_HEATER  18  
+#define PIN_BTN_MODE    19  
 #define PWM_FREQ          5000
 #define PWM_RESOLUTION       8
-#define PWM_MAX           255  // 8-bit: 2^8 - 1
+#define PWM_MAX           255  
 const float g_means[]  = {25.0f, 60.0f, 12.0f, 300.0f, 50.0f, 35.0f, 5.0f, 1.0f, 1000.0f};
 const float g_scales[] = {10.0f, 20.0f, 2.0f,  200.0f, 30.0f, 15.0f, 3.0f, 1.0f, 500.0f};
 #define LOG(msg) Serial.println(F(msg))
@@ -76,36 +77,84 @@ const struct SensorReading* cbuf_get(int steps_back) {
 }
 struct SensorReading g_sensor       = {0};
 struct SensorReading g_sensor_valid = {0};
-DHT g_dht(PIN_DHT, DHT11);             // Changed to DHT11
-volatile uint32_t g_flow_pulses = 0;   // Flow pulse counter
+DHT g_dht(PIN_DHT, DHT11);             
+volatile uint32_t g_flow_pulses = 0;   
 void IRAM_ATTR flow_pulse_counter() {
     g_flow_pulses++;
 }
-float g_tds_history[5] = {0};          // For TDS trend
+float g_tds_history[5] = {0};          
 int   g_tds_idx = 0;
-
-// Global state variables
 int8_t g_mcu_reduced = 0;
 int8_t g_fan_state = 0;
 int8_t g_heat_state = 0;
-
+uint32_t g_leak_suspicious_start_ms = 0;
 bool check_water_leak() {
     if (g_cbuf_count < 2) return false;
-    float drop = cbuf_get(1)->water_level - g_sensor_valid.water_level;
-    if (drop > 5.0f) {
-        Serial.printf("[ALERT] WATER LEAK detected! Δ=%.1f%%\n", drop);
-        return true;
+    uint32_t now = millis();
+    float cur_level = g_sensor_valid.water_level;
+    float prev_level = cbuf_get(1)->water_level;
+    float drop_rate = prev_level - cur_level; 
+    if (drop_rate > 0.8f) { 
+        if (g_leak_suspicious_start_ms == 0) g_leak_suspicious_start_ms = now;
+        uint32_t duration = now - g_leak_suspicious_start_ms;
+        if (duration > 60000) { 
+            Serial.println(F("[WARN] Suspicious water level drop detected..."));
+        }
+        if (duration > 180000) { 
+            if (g_sensor_valid.flow < FLOW_MIN_THRESHOLD) { 
+                Serial.printf("[CRITICAL] LEAK DETECTED! Drop=%.1f%% Flow=%.1f\n", 
+                              drop_rate * 6, g_sensor_valid.flow);
+                digitalWrite(PIN_BUZZER, HIGH);
+                return true;
+            }
+        }
+    } else {
+        g_leak_suspicious_start_ms = 0;
+        digitalWrite(PIN_BUZZER, LOW);
     }
     return false;
 }
-int check_mcu_temperature() {
-    if (g_sensor_valid.mcu_temp >= 85.0f) return 2;
-    if (g_sensor_valid.mcu_temp >= 75.0f) {
-        g_mcu_reduced = 1;
-        return 1;
+uint32_t g_mcu_warning_start_ms = 0;
+uint32_t g_mcu_critical_start_ms = 0;
+bool g_mcu_shutdown = false;
+int check_mcu_temperature(int* motor, int* heater) {
+    uint32_t now = millis();
+    float mcu_t = g_sensor_valid.mcu_temp;
+    if (g_mcu_shutdown && mcu_t <= 60.0f) {
+        Serial.println(F("[THERMAL] MCU Cooled below 60C. Resuming safety restart..."));
+        g_mcu_shutdown = false;
+        g_mcu_warning_start_ms = 0;
+        g_mcu_critical_start_ms = 0;
     }
-    g_mcu_reduced = 0;
-    return 0;
+    if (mcu_t >= 75.0f) {
+        if (g_mcu_warning_start_ms == 0) g_mcu_warning_start_ms = now;
+        uint32_t warn_duration = now - g_mcu_warning_start_ms;
+        if (mcu_t >= 85.0f && warn_duration >= 60000) {
+            if (g_mcu_critical_start_ms == 0) g_mcu_critical_start_ms = now;
+            uint32_t crit_duration = now - g_mcu_critical_start_ms;
+            if (crit_duration >= 30000) { 
+                *motor = 0; 
+                *heater = 0;
+                Serial.println(F("[THERMAL] Stage 2: 85°C sustained. Minimizing load."));
+                if (crit_duration >= 60000) { 
+                    Serial.println(F("[THERMAL] CRITICAL SHUTDOWN triggered (MCU >= 85°C)"));
+                    g_mcu_shutdown = true;
+                    return 2; 
+                }
+                return 1; 
+            }
+        }
+        if (warn_duration >= 60000) {
+            *heater = 0;
+            Serial.println(F("[THERMAL] Stage 1: 75°C sustained. Throttling load."));
+            return 1; 
+        }
+    } else {
+        g_mcu_warning_start_ms = 0;
+        g_mcu_critical_start_ms = 0;
+    }
+    if (g_mcu_shutdown) return 2;
+    return 0; 
 }
 int check_fan_rpm() {
     return (g_fan_state > 0 && g_sensor_valid.rpm < 500) ? 1 : 0;
@@ -115,14 +164,12 @@ int check_battery_low() {
     if (g_sensor_valid.battery < 40.0f) return 1;
     return 0;
 }
-
 bool safety_gate() {
     if (check_freeze() || check_water_leak() || check_mcu_temperature() == 2) return true;
     if (check_fan_rpm() || check_sensor_stuck() || check_heater_dry_run()) return true;
     if (check_battery_low() == 2 || check_tds_trend() == 2) return true;
     return false;
 }
-
 struct TimeFeatures {
     float temp_delta;
     float humidity_delta;
@@ -187,15 +234,10 @@ uint32_t g_last_30m_check_ms     = 0;
 float    g_mcu_temp_1m_ago       = 0;
 uint32_t g_last_1m_check_ms      = 0;
 const uint32_t LOOP_DELAY_MS            = 10000;
-const uint32_t FREEZE_TRIGGER_MS        = 100000;   
-const uint32_t RGB_WET_TRIGGER_MS       = 900000;   
-const uint32_t BLOCKAGE_TRIGGER_MS      = 3000000;  
-const uint32_t SENSOR_STUCK_TRIGGER_MS  = 3000000;  
-const uint32_t MIN_FAN_RUNTIME_MS       = 120000;   
-const uint32_t MIN_HEATER_RUNTIME_MS    = 180000;   
-const float    SENSOR_STUCK_EPS         = 0.15f;
-const float HUMIDITY_HYST = 5.0f;   
-const float TEMP_HYST     = 2.0f;   
+const float FLOW_MIN_THRESHOLD         = 0.3f;
+const uint32_t STARTUP_DELAY_MS        = 10000;  
+const uint32_t NO_FLOW_TIMEOUT_MS      = 180000; 
+const float    TEMP_HYST               = 2.0f;
 uint8_t g_arena[ARENA_SIZE];
 tflite::MicroInterpreter* g_interp = nullptr;
 TfLiteTensor* g_in  = nullptr;
@@ -274,18 +316,16 @@ void setup_gpio() {
     pinMode(PIN_FAN, OUTPUT);
     pinMode(PIN_HEATER, OUTPUT);
     pinMode(PIN_MOTOR, OUTPUT);
-    
+    pinMode(PIN_BUZZER, OUTPUT);
+    digitalWrite(PIN_BUZZER, LOW);
     pinMode(PIN_RED, OUTPUT);
     pinMode(PIN_GREEN, OUTPUT);
     pinMode(PIN_WHITE, OUTPUT);
     led_all_off();
-
     pinMode(PIN_FLOW, INPUT_PULLUP);
     attachInterrupt(digitalPinToInterrupt(PIN_FLOW), flow_pulse_counter, FALLING);
-    
     pinMode(PIN_BTN_HEATER, INPUT_PULLUP);
     pinMode(PIN_BTN_MODE,   INPUT_PULLUP);
-
     g_dht.begin();
     Serial.println("[SETUP] GPIO (3 LEDs + 2 Buttons + Sensors) OK");
 }
@@ -304,41 +344,23 @@ void led_all_off() {
     digitalWrite(PIN_WHITE, LOW);
 }
 void sensor_read_simulated() {
-    // Stable simulation values for testing logic + LEDs
     static float temp_base = 25.0f;
     static float hum_base = 60.0f;
-    
-    // Smooth temperature changes (slow variation)
     temp_base += (rand() % 5 - 2) * 0.2f;
     g_sensor.temp = temp_base;
-    
-    // Smooth humidity changes (slow variation)
     hum_base += (rand() % 5 - 2) * 0.5f;
     g_sensor.humidity = hum_base;
-    
-    // Fixed flow to avoid false blockage detection
     g_sensor.flow = 5.0f;
-    
-    // Fixed RGB state to avoid unexpected regen mode
     g_sensor.rgb_state = 0;
-    
-    // Stable other values
     g_sensor.water_level = 50.0f;
     g_sensor.battery = 80.0f;
     g_sensor.mcu_temp = 40.0f;
-    
-    // Safe TDS range (300-350) to avoid warning/shutdown
     g_sensor.tds = 300.0f + (rand() % 50);
-    
-    // Stable RPM
     g_sensor.rpm = 1200;
 }
-
 void sensor_read_real() {
-    // 1. Read DHT22
     float h = g_dht.readHumidity();
     float t = g_dht.readTemperature();
-    
     if (isnan(h) || isnan(t)) {
         Serial.println("[WARN] DHT read failed! Falling back to simulation for T/H.");
         g_sensor.temp = 25.0f + (rand() % 40 - 20) / 10.0f;
@@ -347,47 +369,32 @@ void sensor_read_real() {
         g_sensor.temp = t;
         g_sensor.humidity = h;
     }
-
-    // 2. Read TDS (Analog Pin 34)
     int tds_raw = analogRead(PIN_TDS);
     float tds_v = tds_raw * (3.3f / 4095.0f);
-    // Simple conversion model: PPM = (Voltage / 2.3) * 1000 (Adjust based on sensor calibration)
     float tds_ppm = (tds_v / 2.3f) * 1000.0f; 
-    
     if (tds_ppm < 0 || tds_ppm > 2000) {
         Serial.println("[WARN] TDS OOR! Falling back to simulation.");
         g_sensor.tds = 300.0f + (rand() % 50);
     } else {
         g_sensor.tds = tds_ppm;
     }
-
-    // 3. Read Flow (Digital Pulse Pin 35)
-    // Rate = Pulses over LOOP_DELAY_MS interval
     uint32_t pulses = g_flow_pulses;
-    g_flow_pulses = 0; // Reset for next interval
-    
-    // LPM = (Pulses / (Interval_sec)) / 7.5 (Typical YF-S201 factor)
+    g_flow_pulses = 0; 
     float lpm = (float)pulses / (LOOP_DELAY_MS / 1000.0f) / 7.5f;
-    
     if (lpm < 0 || lpm > 50) {
         Serial.println("[WARN] Flow sensor erratic! Falling back to simulation.");
         g_sensor.flow = 5.0f;
     } else {
         g_sensor.flow = lpm;
     }
-
-    // 4. Simulated/Fixed Values for others (as requested)
     g_sensor.battery     = 80.0f;
     g_sensor.water_level = 50.0f;
     g_sensor.mcu_temp    = 40.0f;
     g_sensor.rpm         = 1000;
     g_sensor.rgb_state   = 0; 
-
-    // Debug Prints
     Serial.printf("[REAL] T=%.1f H=%.1f TDS=%.1f F=%.1f\n", 
                   g_sensor.temp, g_sensor.humidity, g_sensor.tds, g_sensor.flow);
 }
-
 void sensor_validate() {
     if (g_sensor.temp >= -20 && g_sensor.temp <= 80)
         g_sensor_valid.temp = g_sensor.temp;
@@ -405,10 +412,8 @@ void sensor_validate() {
         g_sensor_valid.flow = g_sensor.flow;
     if (g_sensor.rgb_state == 0 || g_sensor.rgb_state == 1)
         g_sensor_valid.rgb_state = g_sensor.rgb_state;
-    // Fix: Move RPM to validated structure to prevent safety trip
     g_sensor_valid.rpm = g_sensor.rpm; 
 }
-
 int sensor_range_check() {
     if (g_sensor_valid.temp        < -20 || g_sensor_valid.temp        >  80) return 1;
     if (g_sensor_valid.humidity    <   0 || g_sensor_valid.humidity    > 100) return 1;
@@ -435,7 +440,6 @@ int apply_hysteresis(int new_mode, float cur_hum, float cur_temp, float prev_hum
     g_mode_start_ms = now;
     return new_mode;
 }
-
 int check_fan_speed_validation(int expected_rpm) {
     const int MIN_RPM = 500;
     const int MAX_RPM = 3000;
@@ -584,19 +588,45 @@ int advanced_safety_check(AdvancedAlert* alerts, int* alert_count, AdvancedActio
     }
     return (*alert_count > 0 || *action_count > 0) ? 1 : 0;
 }
+bool is_startup_phase() {
+    return millis() < 60000; 
+}
+uint32_t g_no_flow_start_ms = 0;
+uint32_t g_motor_on_start_ms = 0;
+bool is_silica_saturated() {
+    return false; 
+}
+bool check_regen_exit() {
+    if (g_sensor_valid.temp > 5.0f && g_sensor_valid.flow > 0.5f) {
+        return true;
+    }
+    return false;
+}
 int check_freeze() {
+    if (is_startup_phase()) return 0;
     uint32_t now = millis();
-    if (g_sensor_valid.temp <= 0) {
+    bool slow_trigger = (g_sensor_valid.temp <= 0.0f) || 
+                         (g_sensor_valid.rgb_state == 1) || 
+                         (g_tf.flow_delta < -0.2f && g_sensor_valid.flow < 2.0f);
+    if (slow_trigger) {
         if (g_freeze_start_ms == 0) g_freeze_start_ms = now;
         uint32_t elapsed = now - g_freeze_start_ms;
-        g_timer_freeze   = (int)(elapsed / LOOP_DELAY_MS);
-        if (g_timer_freeze >= 10 || elapsed >= FREEZE_TRIGGER_MS) {
-            Serial.println("[ALERT] FREEZING");
+        g_timer_freeze = (int)(elapsed / LOOP_DELAY_MS);
+        if (elapsed >= 600000) { 
+            Serial.println("[ALERT] CONFIRMED FREEZE (Layer 2)");
             return 1;
         }
     } else {
         g_freeze_start_ms = 0;
         g_timer_freeze    = 0;
+    }
+    return 0;
+}
+int check_instant_freeze() {
+    if (is_startup_phase()) return 0;
+    if (g_sensor_valid.temp <= -2.0f || check_temp_drop() || check_ice_detection()) {
+        Serial.println("[CRITICAL] INSTANT FREEZE DETECTED (Layer 1)");
+        return 1;
     }
     return 0;
 }
@@ -639,16 +669,21 @@ int check_rgb_wet() {
     uint32_t now = millis();
     if (g_sensor_valid.rgb_state == 1) {
         if (g_rgb_wet_start_ms == 0) g_rgb_wet_start_ms = now;
-        g_timer_rgb = (int)((now - g_rgb_wet_start_ms) / LOOP_DELAY_MS);
-        if (g_timer_rgb >= 90 || (now - g_rgb_wet_start_ms) >= RGB_WET_TRIGGER_MS) {
-            Serial.println("[ALERT] RGB WET >15 min → REGEN");
-            return 1;
+        uint32_t elapsed_ms = now - g_rgb_wet_start_ms;
+        g_timer_rgb = (int)(elapsed_ms / LOOP_DELAY_MS);
+        if (elapsed_ms >= 3600000) { 
+            Serial.println("[ALERT] RGB FULL SATURATION (>60 min) → REGEN");
+            return 2; 
+        }
+        else if (elapsed_ms >= 900000) {
+            Serial.println("[WARN] RGB SUSTAINED WET (>15 min) → REDUCE MODE");
+            return 1; 
         }
     } else {
         g_rgb_wet_start_ms = 0;
         g_timer_rgb        = 0;
     }
-    return 0;
+    return 0; 
 }
 int check_sensor_stuck() {
     static float last_t=0, last_h=0;
@@ -754,105 +789,144 @@ void apply_production_shields(int* fan, int* heater, int* motor) {
 }
 void handle_extreme_cold(int* fan, int* heater, int* motor) {
     g_mode_current = 4; 
-    if (g_sensor_valid.water_level >= 95.0f) {
-        *fan = 0; *motor = 0; *heater = 1;
-        Serial.println(F("[COLD] Tank Full: Fan OFF, Heater guarding hardware."));
-    } 
-    else {
-        *fan = 1; *motor = 1; *heater = 1;
-        Serial.println(F("[COLD] Tank Low: Attempting production with Thermal Guard."));
+    *motor = 0; 
+    int battery_status = check_battery_low();
+    if (g_sensor_valid.temp <= -5.0f) {
+        *heater = (battery_status == 0) ? 2 : 1; 
+    } else {
+        *heater = 1; 
     }
+    if (battery_status == 2) {
+        *heater = 0; 
+        Serial.println(F("[COLD] Emergency: Battery Critically Low, Heater forced OFF"));
+    } else if (battery_status == 1) {
+        *heater = 1; 
+        Serial.println(F("[COLD] Battery Low: Using LOW regen levels"));
+    }
+    *fan = 1; 
+    Serial.println(F("[COLD] Regen active. Adaptive Control Engaged."));
 }
 void run_decision_cycle(int* fan_out, int* heater_out, int* motor_out) {
-    if (g_sensor_valid.temp <= 5.0f) {
-        handle_extreme_cold(fan_out, heater_out, motor_out);
-        return;
-    }
-    if (check_freeze() || check_water_leak() || check_mcu_temperature() == 2) {
-        g_mode_current = 4; *fan_out = 0; *heater_out = 1; *motor_out = 0;
-        return;
-    }
-    if (check_fan_rpm() || check_sensor_stuck() || check_heater_dry_run()) {
-        g_mode_current = -1; *fan_out = 0; *heater_out = 0; *motor_out = 0;
-        return;
-    }
-    if (check_rgb_wet() && g_sensor_valid.humidity >= 30.0f) { 
-        g_mode_current = 4; *fan_out = 1; *heater_out = 1; *motor_out = 0;
-        return;
-    }
-    if (g_sensor_valid.water_level >= 95 || check_tds_trend() == 2) {
-        g_mode_current = 0; *fan_out = 0; *heater_out = 0; *motor_out = 0;
-        return;
-    }
-    float conf = 0.0f;
-    int ml_mode = ml_predict(&conf);
-    if (conf >= 0.85f) {
-        const struct SensorReading* prev = cbuf_get(1);
-        float p_h = prev ? prev->humidity : g_sensor_valid.humidity;
-        float p_t = prev ? prev->temp : g_sensor_valid.temp;
-        g_mode_current = apply_hysteresis(ml_mode, g_sensor_valid.humidity, g_sensor_valid.temp, p_h, p_t);
-    } else {
-        fallback_rules(fan_out, heater_out, motor_out);
-    }
-    apply_production_shields(fan_out, heater_out, motor_out);
-    if (g_heat_state == 1 && (millis() - g_heat_on_start_ms > 1800000)) {
+    *fan_out = 1; *heater_out = 0; *motor_out = 0;
+    float temp = g_sensor_valid.temp;
+    float hum  = g_sensor_valid.humidity;
+    float flow = g_sensor_valid.flow;
+    float bat  = g_sensor_valid.battery;
+    int thermal_state = check_mcu_temperature(motor_out, heater_out);
+    if (bat < 20.0f || thermal_state == 2) {
+        *motor_out = 0;
         *heater_out = 0;
-        Serial.println(F("[SHIELD] Heater Timeout reached (30m). Forcing Cooldown."));
-    }
-    if (millis() - g_last_1m_check_ms > 60000) {
-        float rise = g_sensor_valid.mcu_temp - g_mcu_temp_1m_ago;
-        if (rise > 2.0f && g_motor_state > 0) {
-            *motor_out = 0; *fan_out = 1; 
-            Serial.println(F("[CRITICAL] Thermal Runaway! MCU rising too fast. Killing Peltier."));
+        *fan_out = 1; 
+        if (thermal_state == 2) {
+            g_mode_current = -1; 
+        } else {
+            g_mode_current = 0;
+            Serial.println(F("[SAFETY] Battery Critical (<20%) - Hardware Standby"));
         }
-        g_mcu_temp_1m_ago = g_sensor_valid.mcu_temp;
-        g_last_1m_check_ms = millis();
+        return;
     }
-    if (g_level_30m_ago < 0) g_level_30m_ago = g_sensor_valid.water_level;
-    if (millis() - g_last_30m_check_ms > 1800000) {
-        if (g_level_30m_ago - g_sensor_valid.water_level > 2.0f && g_motor_state == 0) {
-             g_mode_current = -1; 
-             Serial.println(F("[CRITICAL] Silent Leak Detected (30m trend)!"));
+    if (temp <= -2.0f || check_temp_drop()) {
+        *heater_out = 1;
+        *motor_out = 0;
+        *fan_out = 1;
+        g_mode_current = 4;
+        Serial.println(F("[SAFETY] Rapid Freeze/Critical Cold - REGEN Start"));
+        return;
+    }
+    if (temp <= 0.0f) {
+        if (check_ice_detection()) {
+            *heater_out = 1; 
+            *motor_out = 0;
+            g_mode_current = 4;
+            Serial.println(F("[SAFETY] Ice Detected - Entering REGEN"));
+        } else {
+            *fan_out = 1;    
+            *motor_out = 0;
+            *heater_out = 0;
+            g_mode_current = 0;
+            Serial.println(F("[SAFETY] 0°C reached - Cooling Inhibited, Air Purge Mode"));
         }
-        g_level_30m_ago = g_sensor_valid.water_level;
-        g_last_30m_check_ms = millis();
+        return;
     }
-    if (check_battery_low() == 2) g_mode_current = 0;
-    switch (g_mode_current) {
-        case 0: *fan_out=0; *heater_out=0; *motor_out=0; break;
-        case 1: *fan_out=1; *heater_out=0; *motor_out=1; break;
-        case 2: *fan_out=2; *heater_out=0; *motor_out=1; break;
-        case 3: *fan_out=3; *heater_out=0; *motor_out=1; break;
-        case 4: *fan_out=1; *heater_out=1; *motor_out=0; break;
-        case -1: *fan_out=0; *heater_out=0; *motor_out=0; break; 
-        default: *fan_out=0; *heater_out=0; *motor_out=0;
+    if (temp < 5.0f && hum < 50.0f) {
+        *fan_out = 1;
+        *motor_out = 0;
+        *heater_out = 0;
+        g_mode_current = 0;
+        Serial.println(F("[INFO] Low Temp/Low Humidity - Energy Save Mode"));
+        return;
     }
-    compute_stress_score();
-    *fan_out = enforce_min_fan(*fan_out);
-    *heater_out = enforce_min_heater(*heater_out);
-    g_fan_state = *fan_out;
-    g_heat_state = *heater_out;
-    g_motor_state = *motor_out;
+    uint32_t now = millis();
+    if (g_motor_state == 1) {
+        if (g_motor_on_start_ms == 0) g_motor_on_start_ms = now;
+        if (flow < FLOW_MIN_THRESHOLD) {
+            if (g_no_flow_start_ms == 0) g_no_flow_start_ms = now;
+            uint32_t motor_on_time = now - g_motor_on_start_ms;
+            uint32_t no_flow_time = now - g_no_flow_start_ms;
+            if (motor_on_time > STARTUP_DELAY_MS && no_flow_time > NO_FLOW_TIMEOUT_MS) {
+                if (hum > 60.0f && g_rgb_wet_start_ms != 0 && (now - g_rgb_wet_start_ms > 1200000)) {
+                    Serial.println(F("[FLOW] Saturated: Flow < Threshold for 3m + RGB Wet > 20m"));
+                    *heater_out = 1;
+                    *motor_out = 0;
+                    g_mode_current = 4;
+                    return;
+                }
+                else if (hum < 50.0f) {
+                    Serial.println(F("[FLOW] Low Humidity: Stopping Motor to save energy"));
+                    *motor_out = 0;
+                    *fan_out = 1;
+                    g_mode_current = 0;
+                    return;
+                }
+                else if (g_sensor_valid.rgb_state == 0 && hum > 60.0f) {
+                    Serial.println(F("[ERROR] FLOW SENSOR FAIL: Hum high, RGB dry, but no flow"));
+                    g_mode_current = -1; 
+                    return;
+                }
+            }
+        } else {
+            g_no_flow_start_ms = 0; 
+        }
+    } else {
+        g_motor_on_start_ms = 0;
+        g_no_flow_start_ms = 0;
+    }
+    if (hum > 50.0f && (flow >= FLOW_MIN_THRESHOLD || (now - g_motor_on_start_ms < NO_FLOW_TIMEOUT_MS))) {
+        *fan_out = 1; 
+        *motor_out = 1;
+        g_mode_current = 2;
+        return;
+    }
+    if (hum < 50.0f && flow < 1.0f) {
+        *fan_out = 1;
+        *motor_out = 0;
+        *heater_out = 0;
+        g_mode_current = 0;
+        Serial.println(F("[INFO] Conditions inadequate for production - Fan Only"));
+        return;
+    }
+    *fan_out = 1;
+    *motor_out = 0;
+    *heater_out = 0;
+    g_mode_current = 0;
 }
 void update_led_dashboard() {
     led_all_off();
-    
     if (g_mode_current == -1) {
-        digitalWrite(PIN_RED, HIGH); // System Error / Safety Trip
+        digitalWrite(PIN_RED, HIGH); 
         return;
     }
-
     switch (g_mode_current) {
         case 0: 
-            digitalWrite(PIN_WHITE, HIGH); // IDLE
+            digitalWrite(PIN_WHITE, HIGH); 
             break;
         case 1:
         case 2:
         case 3:
-            digitalWrite(PIN_GREEN, HIGH); // PRODUCTION
+            digitalWrite(PIN_GREEN, HIGH); 
             break;
         case 4:
-            digitalWrite(PIN_WHITE, HIGH); // REGEN / COLD (Mixed state)
+            digitalWrite(PIN_WHITE, HIGH); 
             digitalWrite(PIN_GREEN, HIGH);
             break;
     }
@@ -860,7 +934,19 @@ void update_led_dashboard() {
 void apply_outputs(int fan, int heater, int motor) {
     int fan_pwm   = (fan == 3) ? PWM_MAX : (fan == 2) ? 180 : (fan == 1) ? 120 : 0;
     int motor_pwm = (motor == 1) ? PWM_MAX : 0;
-    int heat_pwm  = (heater == 1) ? PWM_MAX : 0;
+    if (!g_mcu_shutdown) {
+        float mcu_t = g_sensor_valid.mcu_temp;
+        if (mcu_t >= 85.0f && g_mcu_critical_start_ms != 0 && (millis() - g_mcu_critical_start_ms >= 30000)) {
+            motor_pwm = 80; 
+            Serial.println(F("[THERMAL] Throttling Motor to MIN (80 PWM)"));
+        } else if (mcu_t >= 75.0f && g_mcu_warning_start_ms != 0 && (millis() - g_mcu_warning_start_ms >= 60000)) {
+            motor_pwm = 150; 
+            Serial.println(F("[THERMAL] Throttling Motor to LOW (150 PWM)"));
+        }
+    } else {
+        motor_pwm = 0;
+    }
+    int heat_pwm  = (heater == 2) ? PWM_MAX : (heater == 1) ? 150 : 0;
     set_pwm(PIN_FAN,    fan_pwm);
     set_pwm(PIN_HEATER, heat_pwm);
     set_pwm(PIN_MOTOR,  motor_pwm);
@@ -1467,15 +1553,12 @@ void setup() {
     Serial.println("╚══════════════════════════════════════════╝\n");
     setup_gpio();
     setup_pwm();
-    
-    // Startup LED test: Blink all for 2 seconds
     Serial.println("[SETUP] Blinking LEDs for 2s startup test...");
     digitalWrite(PIN_RED, HIGH);
     digitalWrite(PIN_GREEN, HIGH);
     digitalWrite(PIN_WHITE, HIGH);
     delay(2000);
     led_all_off();
-    
     sensor_read_real();
     sensor_validate();
     cbuf_push(&g_sensor_valid);
@@ -1496,20 +1579,15 @@ void setup() {
 void handle_buttons() {
     static bool last_btn_heat = HIGH;
     static bool last_btn_mode = HIGH;
-    static int fan_cycle = 0; // 0:OFF, 1:LOW, 2:MID, 3:MAX
-    
+    static int fan_cycle = 0; 
     bool btn_heat = digitalRead(PIN_BTN_HEATER);
     bool btn_mode = digitalRead(PIN_BTN_MODE);
-    
-    // Heater Toggle
     if (btn_heat == LOW && last_btn_heat == HIGH) {
         g_heat_state = !g_heat_state;
         Serial.printf("[BTN] Heater manually toggled: %s\n", g_heat_state ? "ON" : "OFF");
-        delay(50); // Simple debounce
+        delay(50); 
     }
     last_btn_heat = btn_heat;
-    
-    // Fan Mode Cycle
     if (btn_mode == LOW && last_btn_mode == HIGH) {
         fan_cycle = (fan_cycle + 1) % 4;
         switch(fan_cycle) {
@@ -1518,15 +1596,13 @@ void handle_buttons() {
             case 2: Serial.println("[BTN] Fan: Medium Speed"); break;
             case 3: Serial.println("[BTN] Fan: Max Speed"); break;
         }
-        delay(50); // Simple debounce
+        delay(50); 
     }
     last_btn_mode = btn_mode;
 }
-
 void loop() {
     static bool last_power_state = true;
-    handle_buttons(); // Check for button presses
-    
+    handle_buttons(); 
     if (!g_system_power) {
         if (last_power_state) {
             Serial.println("[PWR] System Powered OFF by User. Hibernating...");
